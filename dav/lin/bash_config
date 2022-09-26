@@ -1,0 +1,13 @@
+function rg1() {
+  grep -i -RnisI --color=auto "" * | cut -c -100
+}
+
+#TODO:
+my users files
+my groups files (all of them)
+suid/sguid files
+sticky files
++i files
+other wired shit
+
+find /etc -writable -ls 2>/dev/null

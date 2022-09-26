@@ -1,0 +1,29 @@
+#/bin/bash
+
+if [[ -n "$1" ]]; then ip="$1"; fi
+echo "Scanning $ip"
+
+function filter {
+  grep -i -v -e 'nmap' -e 'Scanning' -e 'Host is up' -e '^[[:space:]]*$'
+}
+
+# full tcp scan
+ports_tcp=$(rustscan -g -a "$ip" | awk '{print $3}' | tr -d '[]')
+if [[ $ports_tcp ]]; then
+  echo "TCP ports: $ports_tcp"
+  echo 'Scanning TCP for services and versions'
+  nmap -Pn -n -p $ports_tcp -sSV $ip | filter
+  echo
+else
+  echo 'No TCP ports open'
+fi
+
+# top 300 udp scan
+ports_udp=$(nmap --open -Pn -n -sU --top-ports 300 -T4 $ip | grep '^[0-9]' | grep 'open' | grep -v 'closed' | cut -d '/' -f 1 | tr '\n' ',' | sed s/,$//  )
+if [[ $ports_udp ]]; then
+  echo "UDP Ports: $ports_udp"
+  echo 'Scanning UDP for services and versions'
+  nmap -Pn -n -p $ports_udp -sUV $ip | filter
+else
+  echo 'No TOP-300 UDP ports open'
+fi

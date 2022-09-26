@@ -1,0 +1,127 @@
+export DISPLAY='unix:0' # for clipboard
+export PATH="/root/scripts:/root/go/bin:$PATH"
+export PROMPT="%F{098}$lip %F{red}> $ip %F{148}%~ ⇒ %f"
+
+alias msfconsole='msfconsole -r ~/.msf_res.rb'
+alias rlwrap='rlwrap --complete-filenames'
+alias listen='rlwrap --complete-filenames nc -nlvp'
+alias hashex='hashcat --example-hashes'
+alias nth='nth --text'
+alias creds='/opt/creds/creds search'
+
+function gobuster-vhost() { gobuster vhost -H "X-Forwarded-For: 127.0.0.1" -k -z -r -t 64 --random-agent --append-domain -w ~/wordlists/disco/vhosts.txt -u http://$1 |grep -v '(Status: 400)'  }
+
+export ip=127.0.0.1
+export lip=127.0.0.1
+export ntlm='PUT NTMLv1 HASH HERE'
+export ldev='tun0'
+export port=80
+export lport=53
+export link='http://127.0.0.1/'
+export proxy='http://127.0.0.1:8080'
+export domain='PUT DOMAIN HERE'
+export share='PUT_SHARE_NAME_HERE'
+export password='PUT_PASS_HERE'
+export pass_list='/root/wordlists/creds/rockyou.txt'
+export login='Administrator'
+export login_list='/root/wordlists/creds/default_usernames.txt'
+export interface='tun0'
+export lip="$(ip -br a | awk '{print $1,$3}' | grep -v '^$' | grep $interface | awk '{print $2}' | awk -F'/' '{print $1}')"
+export Ip="$ip"
+export iP="$ip"
+export IP="$ip"
+
+alias hydra1='hydra -VfI'
+function brute_ssh()      { cmd="hydra -VfI -C ~/wordlists/creds/ssh.txt -t 8 $1 ssh"; echo $cmd; eval $cmd }
+function brute_oracle()   { cmd="hydra -VfI -C ~/wordlists/creds/oracle.txt -t 16 $1 oracle"; echo $cmd; eval $cmd }
+function brute_telnet()   { cmd="hydra -VfI -C ~/wordlists/creds/telnet.txt -t 16 $1 telnet"; echo $cmd; eval $cmd }
+function brute_mssql()    { cmd="hydra -VfI -C ~/wordlists/creds/mssql.txt -t 16 $1 mssql"; echo $cmd; eval $cmd }
+function brute_ftp()      { cmd="hydra -VfI -C ~/wordlists/creds/ftp.txt -t 16 $1 ftp"; echo $cmd; eval $cmd }
+function brute_mysq()     { cmd="hydra -VfI -C ~/wordlists/creds/mysql.txt -t 16 $1 mysql"; echo $cmd; eval $cmd }
+function brute_postgres() { cmd="hydra -VfI -C ~/wordlists/creds/postgres.txt -t 16 $1 postgres"; echo $cmd; eval $cmd }
+function brute_tomcat1()  { cmd="hydra -VfI -C ~/wordlists/creds/tomcat.txt -t 32 $1 http-get /host-manager/html"; echo $cmd; eval $cmd }
+function brute_tomcat2()  { cmd="hydra -VfI -C ~/wordlists/creds/tomcat.txt -t 32 $1 http-get /manager/html"; echo $cmd; eval $cmd }
+function brute_snmp()     { cmd="hydra -VfI -P ~/wordlists/creds/snmp.txt -t 64 $1 snmp"; echo $cmd; eval $cmd }
+function brute_rdp()      { cmd="hydra -VfI -l Administrator -p ~/wordlists/creds/default_passwords.txt -t 16 $1 rdp"; echo $cmd; eval $cmd }
+function brute_smb()      { cmd="crackmapexec smb $1 -u Administrator -p ~/wordlists/creds/default_passwords.txt"; echo $cmd; eval $cmd }
+
+
+## TODO !!! сортировка словаря паролей по длине. от 6,7,8 
+
+
+function msfconsole() {
+  # Fix for bug, when session does not go to background when Ctr+Z pressed
+  echo 'trap "" TSTP' > /tmp/msf.sh
+  echo 'msfconsole --quiet -r ~/.msf_res.rb' >> /tmp/msf.sh
+  sh /tmp/msf.sh
+}
+
+function setlink() {
+  sed -i '/^export link=/d' ~/.zshrc_extra
+  echo "export link='"$1"'" >> ~/.zshrc_extra
+  export link="$1"
+}
+
+function setip() {
+  sed -i "s/^export ip=.*$/export ip=$1/" ~/.zshrc_extra
+  export ip="$1"
+}
+
+function setport() {
+  sed -i "s/^export port=.*$/export port=$1/" ~/.zshrc_extra
+  export port="$1"
+}
+
+function setlport() {
+  sed -i "s/^export lport=.*$/export lport=$1/" ~/.zshrc_extra
+  export lport="$1"
+}
+
+function setlogin(){
+  sed -i "s/^export login=.*$/export login=$1/" ~/.zshrc_extra
+  export login="$1"
+}
+
+function setloginlist(){
+  sed -i "s/^export login_list=.*$/export login_list=$1/" ~/.zshrc_extra
+  export login_list="$1"
+}
+
+function setpassword(){
+  sed -i "s/^export password=.*$/export password=$1/" ~/.zshrc_extra
+  export password="$1"
+}
+
+function setpasslist(){
+  sed -i "s/^export pass_list=.*$/export pass_list=$1/" ~/.zshrc_extra
+  export pass_list="$1"
+}
+
+function setshare(){
+  sed -i "s/^export share=.*$/export share=$1/" ~/.zshrc_extra
+  export share="$1"
+}
+
+function setproxy() {
+  sed -i '/^export proxy=/d' ~/.zshrc_extra
+  echo "export proxy='"$1"'" >> ~/.zshrc_extra
+  export proxy="$1"
+}
+
+function setdomain() {
+  sed -i '/^export domain=/d' ~/.zshrc_extra
+  echo "export domain='"$1"'" >> ~/.zshrc_extra
+  export domain="$1"
+}
+
+function setinterface() {
+  sed -i '/^export interface=/d' ~/.zshrc_extra
+  echo "export interface='"$1"'" >> ~/.zshrc_extra
+  export interface="$1"
+}
+
+function setntlm() {
+  sed -i '/^export ntlm=/d' ~/.zshrc_extra
+  echo "export ntlm='"$1"'" >> ~/.zshrc_extra
+  export ntlm="$1"
+}

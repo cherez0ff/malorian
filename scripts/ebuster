@@ -1,0 +1,105 @@
+#!/bin/bash
+
+#TODO: .<filename> for backups
+
+# Default variables
+export START="$(date +%s)"
+export EXTRA_SCAN_ARGUMENTS=''
+export EXTENSIONS=''
+mkdir $HOME/.gobuster 2>/dev/null
+
+# User input
+if [[ ! $1 ]]; then echo 'Define scan type (dir/route/api/lang-?/file/bak/vhost/dns) as 1st argument' && exit 1; fi
+if [[ ! $2 ]]; then echo 'Define target URL/domain as 2nd argument' && exit 1; fi
+export URL="$2"
+if [[ "${URL:0-1}" == '/' ]]; then export URL="${URL:0:-1}"; fi ; # Remove slach from URL ending
+
+export WEB_ARGS="-H 'X-Forwarded-For: 127.0.0.1' --no-tls-validation --no-progress --follow-redirect --random-agent -u $URL"
+export WEBPATH_ARGS="$WEB_ARGS --expanded -b 400,404"
+
+# Depending on a scan type set variables
+if [[ $1 == 'dir' ]]; then
+  export SCAN_TYPE="dir"
+  export EXTRA_SCAN_ARGUMENTS="--add-slash $WEBPATH_ARGS"
+  export WORDLISTS=('$HOME/wordlists/disco/webdirs.txt')
+
+elif [[ $1 == 'route' ]]; then
+  export SCAN_TYPE="dir"
+  export EXTRA_SCAN_ARGUMENTS="$WEBPATH_ARGS"
+  export WORDLISTS=('$HOME/wordlists/disco/webroutes.txt')
+
+elif [[ $1 == 'api' ]]; then
+  export SCAN_TYPE="dir"
+  export EXTRA_SCAN_ARGUMENTS="--add-slash $WEBPATH_ARGS"
+  export WORDLISTS=('$HOME/wordlists/disco/api.txt')
+
+elif [[ ${1:0:4} == 'lang' ]]; then
+  export SCAN_TYPE="dir"
+  export EXTRA_SCAN_ARGUMENTS="$WEBPATH_ARGS"
+  export WORDLISTS=("$HOME/wordlists/disco/${1:5}.txt")
+
+elif [[ $1 == 'file' ]]; then
+  export SCAN_TYPE="dir"
+  export EXTRA_SCAN_ARGUMENTS="$WEBPATH_ARGS"
+  export WORDLISTS=("$HOME/wordlists/disco/common_files.txt" "$HOME/wordlists/disco/webroutes.txt")
+  export EXTENSIONS='txt,json,xml'
+
+elif [[ $1 == 'bak' ]]; then
+  export SCAN_TYPE="dir"
+  if [[ ! $3 ]]; then echo 'Define path to file with links as 3rd argument' && exit 1; fi
+  export EXTRA_SCAN_ARGUMENTS="$WEBPATH_ARGS"
+  export WORDLISTS=("$3")
+  export TMP_EXTENSIONS=`cat "$HOME/wordlists/disco/bak_extensions.txt" "$HOME/wordlists/disco/archive_extensions.txt"`
+  export EXTENSIONS=''
+  for ext in ${TMP_EXTENSIONS[@]}; do
+     export EXTENSIONS="$EXTENSIONS,$ext"
+  done
+  export EXTENSIONS=${EXTENSIONS:1} # delete first comma
+
+elif [[ $1 == 'vhost' ]]; then
+  if [[ $3 ]]; then
+    # Case when need to add part of name to the beginning or end
+    export NAME_BEGINING="$3"
+    cp $HOME/wordlists/disco/vhosts.txt $HOME/vhosts.txt.tmp
+    sed -e 's/^/'$NAME_BEGINING'/' -i $HOME/vhosts.txt.tmp
+    # sed -e 's/$/'$NAME_BEGINING'/' -i $HOME/dns.txt.tmp # NOTE: Use this if need to append to end of a subdomain/vhost 
+    export WORDLISTS=("$HOME/vhosts.txt.tmp")
+  else
+    export WORDLISTS=("$HOME/wordlists/disco/vhosts.txt")
+  fi
+  export SCAN_TYPE="vhost"
+  export EXTRA_SCAN_ARGUMENTS="$WEB_ARGS --append-domain"
+
+elif [[ $1 == 'dns' ]]; then
+  if [[ ! $3 ]]; then echo 'Define DNS IP as 3rd argument' && exit 1; fi
+  if [[ $4 ]]; then
+    # Case when need to add part of name to the beginning or end
+    export NAME_BEGINING="$4"
+    cp $HOME/wordlists/disco/dns.txt $HOME/dns.txt.tmp
+    sed -e 's/^/'$NAME_BEGINING'/' -i $HOME/dns.txt.tmp
+    # sed -e 's/$/'$NAME_BEGINING'/' -i $HOME/dns.txt.tmp # NOTE: Use this if need to append to end of a subdomain/vhost 
+    export WORDLISTS=("$HOME/dns.txt.tmp")
+  else
+      export WORDLISTS=("$HOME/wordlists/disco/dns.txt")
+  fi
+  export SCAN_TYPE="dns"
+  export EXTRA_SCAN_ARGUMENTS="-d $URL -r $3"
+
+else
+  echo 'Define scan type as first argument' && exit 1;
+fi
+
+### Generate final cmd and execute it
+export BASIC_CMD="gobuster $SCAN_TYPE -t 64"
+for wordlist in "${WORDLISTS[@]}"
+do
+  export FINAL_CMD="$BASIC_CMD $EXTRA_SCAN_ARGUMENTS -w $wordlist"
+  if [[ $EXTENSIONS ]]; then
+    export FINAL_CMD="$FINAL_CMD -x $EXTENSIONS"
+  fi
+  echo $FINAL_CMD
+  eval $FINAL_CMD | tee "$HOME/.gobuster/`date +%s`_scan.txt"
+  echo '---------------------------------'
+done
+DURATION=$[ $(date +%s) - ${START} ]
+echo "Script done in ${DURATION} seconds"
