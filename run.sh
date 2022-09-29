@@ -3,6 +3,7 @@
 curl -O https://blackarch.org/strap.sh
 
 cd configs
+rm zshrc hybrid.vim zshrc_aliases tmux.conf init.vim
 wget https://raw.githubusercontent.com/cherez0ff/os/master/roles/nvim/files/hybrid.vim
 wget https://raw.githubusercontent.com/cherez0ff/os/master/roles/zsh/files/zshrc
 wget https://raw.githubusercontent.com/cherez0ff/os/master/roles/zsh/files/zshrc_aliases
@@ -24,4 +25,4 @@ export "VULNERS_TOKEN=$VULNERS_TOKEN"
 export "SHODAN_TOKEN=$SHODAN_TOKEN"
 echo 'done!'
 #podman-compose up
-docker-compose up --build
+docker-compose up --build -d

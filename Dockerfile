@@ -1,4 +1,4 @@
-FROM archlinux/archlinux:base-devel
+FROM blackarchlinux/blackarch
 
 ARG VULNERS_TOKEN
 ENV VULNERS_TOKEN=$VULNERS_TOKEN
@@ -30,9 +30,8 @@ RUN echo '[multilib]' >> /etc/pacman.conf && echo 'Include = /etc/pacman.d/mirro
 RUN echo ':ipv4_fallback_enabled: true' > ~/.gemrc
 
 # Install black arch
-COPY strap.sh strap.sh
-RUN sh strap.sh && \
-    pacman -Sly && \
+#COPY strap.sh strap.sh
+RUN pacman -Sly && \
     pacman -Syyu --noconfirm reflector && \
     reflector --latest 5 -p https --sort rate --save /etc/pacman.d/mirrorlist
 

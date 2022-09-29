@@ -36,3 +36,4 @@ ruby-httpclient
 ruby-httparty
 source-highlight
 ranger
+which
