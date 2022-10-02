@@ -3,10 +3,11 @@
 curl -O https://blackarch.org/strap.sh
 
 cd configs
-rm zshrc hybrid.vim zshrc_aliases tmux.conf init.vim
+rm zshrc hybrid.vim zshrc_aliases tmux.conf init.vim git_config
 wget https://raw.githubusercontent.com/cherez0ff/os/master/roles/nvim/files/hybrid.vim
 wget https://raw.githubusercontent.com/cherez0ff/os/master/roles/zsh/files/zshrc
 wget https://raw.githubusercontent.com/cherez0ff/os/master/roles/zsh/files/zshrc_aliases
+wget https://raw.githubusercontent.com/cherez0ff/os/master/roles/zsh/files/git_config
 wget https://raw.githubusercontent.com/cherez0ff/os/master/roles/tmux/files/tmux.conf
 wget https://raw.githubusercontent.com/cherez0ff/os/master/roles/nvim/files/init.vim
 cd ..
