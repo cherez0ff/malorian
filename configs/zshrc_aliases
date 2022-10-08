@@ -2,6 +2,7 @@
 alias tree1="ls -R | grep \":$\" | sed -e 's/:$//' -e 's/[^-][^\/]*\//--/g' -e 's/^/ /' -e 's/-/|/'"
 alias ls='ls -l -F -h -t --author --time-style=long-iso --group-directories-first --color=always'
 alias rg='rg --hidden --ignore-case --max-columns 500 --no-ignore --pretty'
+alias rgl='rg --hidden --no-ignore --pretty --fixed-strings -- ' # literal grep
 alias genpass="strings /dev/urandom | grep -o '[[:alnum:]]' | head -n 18 | tr -d '\n' | xclip -sel clip"
 alias clip='xclip -sel clip'
 alias lsof1='sudo lsof -i -P -n'
@@ -36,6 +37,9 @@ alias ljs="source-highlight -s js --failsafe -f esc --style-file=esc.style | /bi
 alias lyml="source-highlight -s yaml --failsafe -f esc --style-file=esc.style | /bin/less"
 alias ljson="source-highlight -s json --failsafe -f esc --style-file=esc.style | /bin/less"
 alias lxml="source-highlight -s xml --failsafe -f esc --style-file=esc.style | /bin/less"
+
+alias x='xargs'
+alias gitlog='git --no-pager log'
 
 function clipz() {
   gzip -f | base64 -w 0 | clip

@@ -25,5 +25,6 @@ read SHODAN_TOKEN
 export "VULNERS_TOKEN=$VULNERS_TOKEN"
 export "SHODAN_TOKEN=$SHODAN_TOKEN"
 echo 'done!'
-#podman-compose up
-docker-compose up --build -d
+#podman build . -t malorian
+docker build . -t malorian
+#docker run -it --rm -v /home/user/hack:/root/hack -v /etc/hosts:/etc/hosts -v /tmp/.X11-unix:/tmp/.X11-unix --cap-add NET_BIND_SERVICE --cap-add NET_RAW --cap-add NET_ADMIN --cap-add SYS_ADMIN --cap-add DAC_READ_SEARCH malorian zsh

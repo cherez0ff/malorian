@@ -90,3 +90,8 @@ require("indent_blankline").setup {
     show_trailing_blankline_indent = false,
 }
 EOF
+
+# Disable the fucking autoindent after inserting comments, OMG why is this shit even needed
+autocmd BufNewFile,BufReadPost * if &filetype == "python" | set indentkeys-=0# | endif
+autocmd BufNewFile,BufReadPost * if &filetype == "yaml" | set expandtab shiftwidth=2 indentkeys-=0# | endif
+
