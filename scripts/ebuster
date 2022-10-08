@@ -41,7 +41,7 @@ elif [[ ${1:0:4} == 'lang' ]]; then
 elif [[ $1 == 'file' ]]; then
   export SCAN_TYPE="dir"
   export EXTRA_SCAN_ARGUMENTS="$WEBPATH_ARGS"
-  export WORDLISTS=("$HOME/wordlists/disco/common_files.txt" "$HOME/wordlists/disco/webroutes.txt")
+  export WORDLISTS=("$HOME/wordlists/disco/common.txt" "$HOME/wordlists/disco/webroutes.txt")
   export EXTENSIONS='txt,json,xml'
 
 elif [[ $1 == 'bak' ]]; then

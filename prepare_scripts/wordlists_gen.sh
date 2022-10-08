@@ -4,12 +4,13 @@ cd /root/wordlists/disco
 wget -4 https://wordlists-cdn.assetnote.io/data/manual/best-dns-wordlist.txt                           -O dns.txt
 wget -4 https://wordlists-cdn.assetnote.io/data/automated/httparchive_subdomains_2022_08_28.txt        -O vhosts.txt
 wget -4 https://raw.githubusercontent.com/danielmiessler/SecLists/master/Discovery/Web-Content/common.txt -O common.txt
-wget -4 https://wordlists-cdn.assetnote.io/data/automated/httparchive_directories_1m_2022_08_28.txt    -O webroutes_tmp.txt
-awk '!a[$0]++' webroutes_tmp.txt > webroutes_tmp.txt # remove duplicates without change of order
+
+wget -4 https://wordlists-cdn.assetnote.io/data/automated/httparchive_directories_1m_2022_08_28.txt    -O webroutes_tmp1.txt
+awk '!a[$0]++' webroutes_tmp1.txt > webroutes_tmp2.txt # remove duplicates without change of order
 cat common.txt > webroutes.txt
-webroutes.txt
-cut -b 1 --complement webroutes_tmp.txt >> webroutes.txt # delete fist slash from webroutes
-rm webroutes_tmp.txt
+cut -b 1 --complement webroutes_tmp2.txt >> webroutes.txt # delete fist slash from webroutes
+rm webroutes_tmp1.txt webroutes_tmp2.txt
+
 wget -4 https://github.com/danielmiessler/SecLists/raw/master/Discovery/Web-Content/directory-list-lowercase-2.3-big.txt -O webdirs.txt
 wget -4 https://wordlists-cdn.assetnote.io/data/automated/httparchive_apiroutes_2022_08_28.txt         -O api.txt
 wget -4 https://wordlists-cdn.assetnote.io/data/automated/httparchive_parameters_top_1m_2022_08_28.txt -O params.txt

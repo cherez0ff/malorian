@@ -23,9 +23,11 @@ if args.debug:
 else:
     debug = ''
 
+args.method = args.method.lower()
+
 cmd = f'''/usr/sbin/hydra -IvVF {debug} {args.user} {args.passwd} -t {args.speed} {args.ip} http-{args.method}-form '''
 cmd += f'''\'{args.link}:{args.body}:F={args.fail}'''
-if args.cookie != '':
+if args.cookie != None:
     cmd += r':H=Cookie\: '
     cmd += f'''{args.cookie}\''''
 else:

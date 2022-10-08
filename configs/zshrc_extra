@@ -7,7 +7,7 @@ alias rlwrap='rlwrap --complete-filenames'
 alias listen='rlwrap --complete-filenames nc -nlvp'
 alias hashex='hashcat --example-hashes'
 alias nth='nth --text'
-alias creds='/opt/creds/creds search'
+alias defcreds='/opt/creds/creds search'
 
 function gobuster-vhost() { gobuster vhost -H "X-Forwarded-For: 127.0.0.1" -k -z -r -t 64 --random-agent --append-domain -w ~/wordlists/disco/vhosts.txt -u http://$1 |grep -v '(Status: 400)'  }
 
