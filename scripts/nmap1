@@ -4,7 +4,7 @@ if [[ -n "$1" ]]; then ip="$1"; fi
 echo "Scanning $ip"
 
 function filter {
-  grep -i -v -e 'nmap' -e 'Scanning' -e 'Host is up' -e '^[[:space:]]*$'
+  grep -i -v -e 'nmap' -e 'Scanning' -e '^Host is up' -e '^[[:space:]]*$' -e '^SF' -e '^===='
 }
 
 # full tcp scan

@@ -141,6 +141,7 @@ COPY configs/hybrid.vim .config/nvim/colors/hybrid.vim
 COPY configs/init.vim .config/nvim/init.vim
 COPY configs/proxychains.conf /etc/proxychains.conf
 COPY configs/git_config ~/.git/config
+COPY configs/lynxrc ~/.lynxrc
 
 # Configure vim
 RUN curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim

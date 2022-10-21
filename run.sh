@@ -10,6 +10,7 @@ wget https://raw.githubusercontent.com/cherez0ff/os/master/roles/zsh/files/zshrc
 wget https://raw.githubusercontent.com/cherez0ff/os/master/roles/zsh/files/git_config
 wget https://raw.githubusercontent.com/cherez0ff/os/master/roles/tmux/files/tmux.conf
 wget https://raw.githubusercontent.com/cherez0ff/os/master/roles/nvim/files/init.vim
+wget https://raw.githubusercontent.com/cherez0ff/os/master/roles/lynx/files/lynxrc
 cd ..
 
 # Allow connection to clipboard
