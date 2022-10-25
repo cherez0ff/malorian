@@ -1,4 +1,5 @@
 admin
+root
 administrators
 auth_user_file
 ccbill

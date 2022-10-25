@@ -12,6 +12,7 @@ import os
 parser = argparse.ArgumentParser(add_help=True)
 parser.add_argument('-f', '--file', help='Specify the list with domains')
 parser.add_argument('-d', '--domain', help='Specify the single domain')
+parser.add_argument('-o', '--output', help='Specify output file')
 parser.add_argument('-a', '--apikey', help='Provide securitytrails API key')
 args = parser.parse_args()
 
@@ -28,7 +29,6 @@ else:
         sys.exit(1)
 
 
-args.apikey =
 HEADERS = {
     "accept": "application/json",
     "APIKEY": apikey
@@ -48,28 +48,48 @@ def get_ips(domain):
     if response.status_code == 200:
         return parse_responce(response.json())
     else:
-        print(f"Eror for {domain}: returned {str(response.status_code)}", file=sys.stderr)
+        print(f"\nEror for {domain}: returned {str(response.status_code)}", file=sys.stderr)
         return []
 
 def get_domains(args):
-    if not args.domain:
-        if not args.file:
-            print('Specify domain of file with domains', file=sys.stderr)
-            sys.exit(1)
-        else:
+    if args.domain:
+        return [args.domain]
+    else:
+        if args.file:
             domains = []
             with open(args.file, 'r') as f:
                 for domain in f:
                     domains.append(domain.replace('\n', ''))
             return domains
-    else:
-        return [args.domain]
+        else:
+            print('Specify file with domains', file=sys.stderr)
+            sys.exit(1)
     
+
+def remove_local_ranges(ips):
+    for ip in ips:
+        octets = [int(x) for x in ip.split(".")]
+        net127 = (octets[0] == 127)
+        net192 = (octets[0] == 192 and octets[1] == 168)
+        net172 = (octets[0] == 172 and (octets[1] in [16-32]))
+        net10 = (octets[0] == 10)
+        if net127 or net192 or net172  or net10:
+            ips.remove(ip)
+    return ips
+
+
+
 # main
 final_ips = []
 for domain in get_domains(args):
     ips = get_ips(domain)
-    final_ips.append(ips)
-final_ips = sorted(set(final_ips))
-for i in final_ips:
-    print(i)
+    final_ips += ips
+    if ips:
+        print(f'\nDomain {domain}:')
+        for i in ips: print(i)
+
+if args.output:
+    final_ips = remove_local_ranges(sorted(set(final_ips)))
+    with open(args.output, 'w') as fp:
+        for item in final_ips:
+            fp.writelines(item+'\n')
