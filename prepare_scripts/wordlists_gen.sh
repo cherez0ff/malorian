@@ -1,9 +1,17 @@
 #!/bin/bash
 mkdir -p /root/wordlists/disco 2>/dev/null
 cd /root/wordlists/disco
-wget -4 https://wordlists-cdn.assetnote.io/data/manual/best-dns-wordlist.txt                           -O dns.txt
-wget -4 https://wordlists-cdn.assetnote.io/data/automated/httparchive_subdomains_2022_08_28.txt        -O vhosts.txt
+
 wget -4 https://raw.githubusercontent.com/danielmiessler/SecLists/master/Discovery/Web-Content/common.txt -O common.txt
+
+# Generate vhosts/subdomains
+wget -4 https://wordlists-cdn.assetnote.io/data/manual/best-dns-wordlist.txt                           -O vhosts0.txt
+wget -4 https://wordlists-cdn.assetnote.io/data/automated/httparchive_subdomains_2022_08_28.txt        -O vhosts1.txt
+wget -4 https://github.com/internetwache/CT_subdomains/blob/master/top-10000.txt                       -O vhosts2.txt
+cat vhosts2.txt | cut -d ',' -f2 | grep -v '*' | grep -v '#'        > vhosts2.1.txt
+cat vhosts0.txt vhosts1.txt vhosts2.1.txt                           > vhosts_with_dupes.txt
+awk '!a[$0]++' vhosts_with_dupes.txt                                > vhosts.txt
+rm vhosts1.txt vhosts2.txt vhosts2.1.txt vhosts_with_dupes.txt
 
 # Generate webroutes
 wget -4 https://wordlists-cdn.assetnote.io/data/automated/httparchive_directories_1m_2022_08_28.txt    -O webroutes_tmp1.txt
@@ -14,8 +22,8 @@ rm webroutes_tmp1.txt webroutes_tmp2.txt
 
 # Generate webdirs
 wget -4 https://raw.githubusercontent.com/danielmiessler/SecLists/master/Discovery/Web-Content/raft-large-directories.txt -O webdirs1.txt
-wget -4 https://github.com/danielmiessler/SecLists/raw/master/Discovery/Web-Content/directory-list-lowercase-2.3-big.txt -O webdirs2.txt
-cat webdirs1.txt webdirs2.txt > webdirs_with_dupes.txt
+wget -4 https://github.com/danielmiessler/SecLists/raw/master/Discovery/Web-Content/directory-list-lowercase-2.3-big.txt  -O webdirs2.txt
+cat webdirs1.txt webdirs2.txt         > webdirs_with_dupes.txt
 awk '!a[$0]++' webdirs_with_dupes.txt > webroutes.txt 
 rm webdirs1.txt  webdirs2.txt webdirs_with_dupes.txt
 
@@ -24,8 +32,8 @@ wget -4 https://wordlists-cdn.assetnote.io/data/automated/httparchive_parameters
 wget -4 https://wordlists-cdn.assetnote.io/data/manual/aspx_lowercase.txt                              -O aspx.txt
 wget -4 https://wordlists-cdn.assetnote.io/data/automated/httparchive_parameters_top_1m_2022_08_28.txt -O jsp.txt
 wget -4 https://wordlists-cdn.assetnote.io/data/automated/httparchive_php_2022_08_28.txt               -O php.txt
-wget -4 https://raw.githubusercontent.com/danielmiessler/SecLists/master/Discovery/Web-Content/web-all-content-types.txt -O content_types.txt
-wget -4 https://raw.githubusercontent.com/danielmiessler/SecLists/master/Discovery/Infrastructure/All-Ipv4-ClassA-10.10.txt -O class_a.txt
+wget -4 https://raw.githubusercontent.com/danielmiessler/SecLists/master/Discovery/Web-Content/web-all-content-types.txt      -O content_types.txt
+wget -4 https://raw.githubusercontent.com/danielmiessler/SecLists/master/Discovery/Infrastructure/All-Ipv4-ClassA-10.10.txt   -O class_a.txt
 wget -4 https://raw.githubusercontent.com/danielmiessler/SecLists/master/Discovery/Infrastructure/All-Ipv4-ClassC-192.168.txt -O class_c.txt
 
 mkdir -p cd /root/wordlists/creds 2>/dev/null
