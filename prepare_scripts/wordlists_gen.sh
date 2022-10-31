@@ -5,13 +5,20 @@ wget -4 https://wordlists-cdn.assetnote.io/data/manual/best-dns-wordlist.txt    
 wget -4 https://wordlists-cdn.assetnote.io/data/automated/httparchive_subdomains_2022_08_28.txt        -O vhosts.txt
 wget -4 https://raw.githubusercontent.com/danielmiessler/SecLists/master/Discovery/Web-Content/common.txt -O common.txt
 
+# Generate webroutes
 wget -4 https://wordlists-cdn.assetnote.io/data/automated/httparchive_directories_1m_2022_08_28.txt    -O webroutes_tmp1.txt
 awk '!a[$0]++' webroutes_tmp1.txt > webroutes_tmp2.txt # remove duplicates without change of order
 cat common.txt > webroutes.txt
 cut -b 1 --complement webroutes_tmp2.txt >> webroutes.txt # delete fist slash from webroutes
 rm webroutes_tmp1.txt webroutes_tmp2.txt
 
-wget -4 https://github.com/danielmiessler/SecLists/raw/master/Discovery/Web-Content/directory-list-lowercase-2.3-big.txt -O webdirs.txt
+# Generate webdirs
+wget -4 https://raw.githubusercontent.com/danielmiessler/SecLists/master/Discovery/Web-Content/raft-large-directories.txt -O webdirs1.txt
+wget -4 https://github.com/danielmiessler/SecLists/raw/master/Discovery/Web-Content/directory-list-lowercase-2.3-big.txt -O webdirs2.txt
+cat webdirs1.txt webdirs2.txt > webdirs_with_dupes.txt
+awk '!a[$0]++' webdirs_with_dupes.txt > webroutes.txt 
+rm webdirs1.txt  webdirs2.txt webdirs_with_dupes.txt
+
 wget -4 https://wordlists-cdn.assetnote.io/data/automated/httparchive_apiroutes_2022_08_28.txt         -O api.txt
 wget -4 https://wordlists-cdn.assetnote.io/data/automated/httparchive_parameters_top_1m_2022_08_28.txt -O params.txt
 wget -4 https://wordlists-cdn.assetnote.io/data/manual/aspx_lowercase.txt                              -O aspx.txt
