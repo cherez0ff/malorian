@@ -4,14 +4,15 @@ cd /root/wordlists/disco
 
 wget -4 https://raw.githubusercontent.com/danielmiessler/SecLists/master/Discovery/Web-Content/common.txt -O common.txt
 
-# Generate vhosts/subdomains
-wget -4 https://wordlists-cdn.assetnote.io/data/manual/best-dns-wordlist.txt                           -O vhosts0.txt
-wget -4 https://wordlists-cdn.assetnote.io/data/automated/httparchive_subdomains_2022_08_28.txt        -O vhosts1.txt
-wget -4 https://github.com/internetwache/CT_subdomains/blob/master/top-10000.txt                       -O vhosts2.txt
-cat vhosts2.txt | cut -d ',' -f2 | grep -v '*' | grep -v '#'        > vhosts2.1.txt
-cat vhosts0.txt vhosts1.txt vhosts2.1.txt                           > vhosts_with_dupes.txt
-awk '!a[$0]++' vhosts_with_dupes.txt                                > vhosts.txt
-rm vhosts1.txt vhosts2.txt vhosts2.1.txt vhosts_with_dupes.txt
+# Generate subdomains for vhost / dns enum
+wget -4 https://wordlists-cdn.assetnote.io/data/automated/httparchive_subdomains_2022_08_28.txt        -O vhosts1_tmp.txt; head -n 100000 vhosts1_tmp.txt > vhosts1.txt # 1.990.054 -> 100k
+wget -4 https://github.com/internetwache/CT_subdomains/blob/master/top-100000.txt                      -O vhosts2_tmp.txt; cat vhosts2.txt | cut -d ',' -f2 | grep -v '*' | grep -v '#' > vhosts2.txt
+wget -4 https://wordlists-cdn.assetnote.io/data/manual/best-dns-wordlist.txt                           -O vhosts3_tmp.txt; head -n 100000 vhosts3_tmp.txt > vhosts3.txt # 9.544.235 -> 100k
+cat vhosts1.txt vhosts2.txt vhosts3.txt                             > vhosts_with_dupes.txt
+cat vhosts1_tmp.txt vhosts2.txt vhosts3_tmp.txt                     > dns_with_dupes.txt
+awk '!a[$0]++' vhosts_with_dupes.txt                                > vhosts.txt # ~ 300k
+awk '!a[$0]++' dns_with_dupes.txt                                   > dns.txt # ~ 10kk
+rm vhosts1.txt vhosts2.txt vhosts2.1.txt vhosts_with_dupes.txt dns_with_dupes.txt
 
 # Generate webroutes
 wget -4 https://wordlists-cdn.assetnote.io/data/automated/httparchive_directories_1m_2022_08_28.txt    -O webroutes_tmp1.txt
