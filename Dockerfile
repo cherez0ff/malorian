@@ -147,7 +147,7 @@ COPY configs/lynxrc ~/.lynxrc
 RUN curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 RUN nvim --headless +PlugInstall +qa
 
-RUN echo 'nameserver 9.9.9.9' > /etc/resolv.conf0
+RUN echo 'nameserver 9.9.9.9' > /etc/resolv.conf
 COPY configs/resolv.conf /etc/resolv.conf
 
 # Add default ssh key payload
