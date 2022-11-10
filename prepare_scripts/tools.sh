@@ -9,3 +9,5 @@ wget -4 https://github.com/ouch-org/ouch/releases/latest/download/ouch-x86_64-li
 chmod +x /usr/local/bin/ouch
 
 wget -4 https://raw.githubusercontent.com/cherez0ff/os/master/roles/zsh/files/scripts/jstree
+
+wget -4 https://raw.githubusercontent.com/t3l3machus/psudohash/main/psudohash.py
