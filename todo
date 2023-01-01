@@ -72,3 +72,7 @@ recreate image and check what created /opt/exploitdb
 
 
 заменить везде '/var/tmp' и '/tmp' на "/dev/shm" - его не блокирует политика readOnlyRootFilesystem
+
+
+Скрипт для генерации паролей, посмотреть
+https://raw.githubusercontent.com/trevphil/password-permutor/master/permutor.py

@@ -1,0 +1,11 @@
+ftp://
+file://
+http://
+https://
+gopher://
+
+netdoc:///etc/passwd
+jar:proto-schema://blah!/
+
+example:
+jar:http://localhost!/

@@ -1,0 +1,13 @@
+file:///
+dict://
+sftp://
+ldap://
+tftp://
+gopher://
+ssh://
+http://
+https://
+imap://
+pop3://
+smtp://
+telnet://

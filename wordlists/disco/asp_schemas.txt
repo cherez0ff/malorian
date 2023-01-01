@@ -1,0 +1,5 @@
+gopher://
+ftp://
+file://
+http://
+https://

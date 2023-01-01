@@ -1,0 +1,6 @@
+#TODO alias for all databases like dblog -t mssql/psql/mysql/sqlite/oracle -l $login -p $pass -i $IP [-c "$CMD"] 
+
+# mssql
+docker pull mcr.microsoft.com/mssql-tools
+
+TODO

@@ -38,3 +38,5 @@ source-highlight
 ranger
 which
 diffutils
+make
+gcc

@@ -8,6 +8,7 @@ wget -4 https://github.com/carlospolop/PEASS-ng/releases/latest/download/linpeas
 wget -4 https://github.com/DominicBreuker/pspy/releases/latest/download/pspy64
 wget -4 https://github.com/jpillora/chisel/releases/download/v1.7.7/chisel_1.7.7_linux_amd64.gz && gunzip chisel_1.7.7_linux_amd64.gz
 wget -4 https://github.com/Fahrj/reverse-ssh/releases/latest/download/reverse-sshx64
+wget -4 https://github.com/huntergregal/mimipenguin/releases/download/2.0-release/mimipenguin_2.0-release.tar.gz && gunzip mimipenguin_2.0-release.tar && tar xvf mimipenguin_2.0-release.tar && rm mimipenguin_2.0-release.tar
 cd /var/www/dav/win/x86
 wget -4 https://github.com/DominicBreuker/pspy/releases/latest/download/pspy32
 wget -4 https://github.com/jpillora/chisel/releases/download/v1.7.7/chisel_1.7.7_linux_386.gz && gunzip chisel_1.7.7_linux_386.gz 
